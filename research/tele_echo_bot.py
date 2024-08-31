@@ -12,7 +12,6 @@ API_TOKEN = os.getenv("TOKEN")
 logging.basicConfig(level=logging.INFO)
 
 # initialize bot and dispather
-
 bot = Bot(token=API_TOKEN)
 dp = Dispatcher(bot)
 
@@ -24,6 +23,7 @@ async def command_start_handler(message: types.Message):
     """
     
     await message.reply("Hi\nI am Echo bot!\nPowered by aiogram.")
+
 
 
 

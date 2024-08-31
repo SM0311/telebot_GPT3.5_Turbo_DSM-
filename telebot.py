@@ -79,16 +79,21 @@ async def chatgpt(message: types.Message):
     A handler to process the user's input and generate a response using chatGPT API.
     """
     print(f">>> USER: \n\t{message.text}")
-    response = openai.ChatCompletion.create(
-        model = model_name,
-        message = [
-            {"role": "assistant", "content": reference.response}, #role assistant
-            {"role": "user", "content": message.text} #our query
-        ]
-    )
-    reference.response = response["choices"][0]["message"]['content']
-    print(f">>> chatGPT: \n\t{reference.response}")
-    await bot.send_message(chat_id=message.chat.id, text= reference.response)
+    
+    try:
+        response = openai.Completion.create(
+            model=model_name,
+            prompt=message.text,
+            max_tokens=150
+        )
+        print(f">>> RAW API RESPONSE: \n\t{response}")
+        reference.response = response.choices[0].text.strip()
+        print(f">>> chatGPT: \n\t{reference.response}")
+        await bot.send_message(chat_id=message.chat.id, text=reference.response)
+    except Exception as e:
+        print(f"Error: {e}")
+        await bot.send_message(chat_id=message.chat.id, text="An error occurred. Please try again.")
+
 
 
 
